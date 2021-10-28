@@ -31,12 +31,13 @@ public class TrustlyWKScriptOpenURLScheme: NSObject, WKScriptMessageHandler {
     weak var trustlyCheckoutDelegate: TrustlyCheckoutDelegate?
 
     weak var webView: WKWebView?
-
+    var baseURL : URL?
     /// Name of the "native bridge" that will be used to communicate with the web view.
     public static let NAME = "trustlySDKBridge"
     
-    public init(webView: WKWebView?) {
+    public init(webView: WKWebView?, baseURL: URL? = nil) {
         self.webView = webView
+        self.baseURL = baseURL
     }
     
     /**
@@ -77,7 +78,15 @@ public class TrustlyWKScriptOpenURLScheme: NSObject, WKScriptMessageHandler {
             
             if let url = URL(string: urlScheme) {
                 if #available(iOS 10.0, *) {
-                    UIApplication.shared.open(url, options: [:], completionHandler: nil)
+                    guard let baseURL = baseURL else {
+                        UIApplication.shared.open(url, options: [:], completionHandler: nil)
+                    }
+                    if let urlHost = url.host, let baseHost = baseURL.host{
+                        if (urlHost.contains(baseHost)) {
+                        webView?.load(URLRequest(url: url))
+                    }
+                    return
+                    
                 } else {
                     UIApplication.shared.openURL(url)
                 }
