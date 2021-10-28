@@ -84,7 +84,8 @@ public class TrustlyWKScriptOpenURLScheme: NSObject, WKScriptMessageHandler {
                     }
                     if let urlHost = url.host, let baseHost = baseURL.host{
                         if (urlHost.contains(baseHost)) {
-                        webView?.load(URLRequest(url: url))
+                            print("WEbView will load with TrustyURL		")
+                      //  webView?.load(URLRequest(url: url))
                     }
                     return
                     
