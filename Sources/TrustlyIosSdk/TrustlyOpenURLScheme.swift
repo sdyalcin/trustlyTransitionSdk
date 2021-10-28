@@ -80,6 +80,7 @@ public class TrustlyWKScriptOpenURLScheme: NSObject, WKScriptMessageHandler {
                 if #available(iOS 10.0, *) {
                     guard let baseURL = baseURL else {
                         UIApplication.shared.open(url, options: [:], completionHandler: nil)
+                        return
                     }
                     if let urlHost = url.host, let baseHost = baseURL.host{
                         if (urlHost.contains(baseHost)) {
@@ -96,6 +97,8 @@ public class TrustlyWKScriptOpenURLScheme: NSObject, WKScriptMessageHandler {
             webView?.evaluateJavaScript(js, completionHandler: nil)
         }
     }
+    }
+        
     
     /**
         Validate and call the correct delegate method for the event.
